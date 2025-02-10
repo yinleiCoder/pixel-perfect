@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { UserButton, OrganizationSwitcher, SignedOut, SignInButton } from "@clerk/nextjs";
+import {
+  UserButton,
+  OrganizationSwitcher,
+  SignedOut,
+  SignInButton,
+  ClerkLoaded,
+} from "@clerk/nextjs";
 
 function Header() {
   return (
@@ -7,13 +13,15 @@ function Header() {
       <div className="container mx-auto flex justify-between items-center">
         <div>Pixel Perfect</div>
         <div className="flex items-center gap-4">
-          <OrganizationSwitcher />
-          <UserButton />
-          <SignedOut>
-            <SignInButton>
-              <Button>登录</Button>
-            </SignInButton>
-          </SignedOut>
+          <ClerkLoaded>
+            <OrganizationSwitcher />
+            <UserButton />
+            <SignedOut>
+              <SignInButton>
+                <Button>登录</Button>
+              </SignInButton>
+            </SignedOut>
+          </ClerkLoaded>
         </div>
       </div>
     </div>
