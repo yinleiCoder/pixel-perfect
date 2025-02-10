@@ -20,6 +20,7 @@ http.route({
           "svix-signature": headerPayload.get("svix-signature"),
         },
       });
+      // clerk webhook
       switch (result.type) {
         case "user.created":
           await ctx.runMutation(internal.users.createUser, {
