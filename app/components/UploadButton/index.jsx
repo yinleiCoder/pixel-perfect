@@ -60,21 +60,46 @@ export function UploadButton() {
 
   async function onSubmit(values) {
     if (!orgId) return;
+    let selectedFileOfType = values.file[0].type;
     // Step 1: Get a short-lived upload URL
     const postUrl = await generateUploadUrl();
     // Step 2: POST the file to the URL
+    const fileContentTypes = {
+      "image/png": "image",
+      "image/jpeg": "image",
+      "image/webp": "image",
+      "audio/aac": "audio",
+      "audio/mpeg": "audio",
+      "audio/wav": "audio",
+      "video/mp4": "video",
+      "video/mpeg": "video",
+      "application/zip": "zip",
+      "application/pdf": "pdf",
+      "application/octet-stream": "other",
+    };
+    if (Object.keys(fileContentTypes).indexOf(selectedFileOfType) === -1) {
+      selectedFileOfType = "application/octet-stream";
+    }
     const result = await fetch(postUrl, {
       method: "POST",
-      headers: { "Content-Type": values.file[0].type },
+      headers: {
+        "Content-Type": selectedFileOfType,
+      },
       body: values.file[0],
     });
     const { storageId } = await result.json();
     // Step 3: Save the newly allocated storage id to the database
+    console.log(selectedFileOfType, fileContentTypes[selectedFileOfType]);
     try {
       await createFile({
         name: values.title,
+        type: fileContentTypes[selectedFileOfType],
         fileId: storageId,
         orgId,
+      });
+      toast({
+        title: "文件上传成功",
+        description: `${values.title} 文件已上传至Convex`,
       });
     } catch (err) {
       toast({
@@ -130,7 +155,9 @@ export function UploadButton() {
                 disabled={form.formState.isSubmitting}
                 className="w-full flex items-center gap-2"
               >
-                {form.formState.isSubmitting && <Loader2 className="w-4 h-4 animate-spin"/>}
+                {form.formState.isSubmitting && (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                )}
                 上传
               </Button>
             </form>

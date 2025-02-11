@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   UserButton,
   OrganizationSwitcher,
@@ -6,6 +5,7 @@ import {
   SignInButton,
   ClerkLoaded,
 } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
 
 function Header() {
   return (

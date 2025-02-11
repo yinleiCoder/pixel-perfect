@@ -1,6 +1,17 @@
 "use client";
 
-import { EllipsisVertical, TrashIcon } from "lucide-react";
+import {
+  AudioLines,
+  Clapperboard,
+  EllipsisVertical,
+  File,
+  FileText,
+  Image as LucideImage,
+  Package,
+  Star,
+  StarHalf,
+  TrashIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,7 +24,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -26,17 +36,18 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
 
-function CardActionsDropdown({ file }) {
+function CardActionsDropdown({ file, isFavorited }) {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const { toast } = useToast();
   const deleteFile = useMutation(api.files.deleteFile);
+  const toggleFavorite = useMutation(api.files.toggleFavorite);
   return (
     <>
       <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
@@ -79,6 +90,13 @@ function CardActionsDropdown({ file }) {
           <EllipsisVertical />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
+          <DropdownMenuItem
+            className="flex items-center gap-1 cursor-pointer"
+            onClick={() => toggleFavorite({ fileId: file._id })}
+          >
+            {isFavorited ? <Star fill="yellow"/> : <Star />}
+            <span>{isFavorited?"已收藏":"收藏"}</span>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex items-center gap-1 text-red-500 cursor-pointer"
@@ -93,21 +111,51 @@ function CardActionsDropdown({ file }) {
   );
 }
 
-function FileCard({ file }) {
+function FileCard({ file, favorites }) {
+  const typeIcons = {
+    image: <LucideImage />,
+    audio: <AudioLines />,
+    video: <Clapperboard />,
+    pdf: <FileText />,
+    zip: <Package />,
+    other: <File />,
+  };
+
+  const isFavorited = favorites?.some(
+    (favorite) => favorite.fileId === file._id
+  );
+
   return (
     <Card>
       <CardHeader className="relative">
-        <CardTitle>{file.name}</CardTitle>
+        <CardTitle className="flex items-center gap-1">
+          {typeIcons[file.type]}
+          {file.name}
+        </CardTitle>
         <div className="absolute top-2 right-2">
-          <CardActionsDropdown file={file} />
+          <CardActionsDropdown isFavorited={isFavorited} file={file} />
         </div>
-        {/* <CardDescription></CardDescription> */}
       </CardHeader>
-      <CardContent>
-        <p>Card Content</p>
+      <CardContent className="relative aspect-video flex justify-center items-center">
+        {file.type === "image" && (
+          <Image
+            src={file.url}
+            alt="preview image"
+            fill
+            className="object-cover"
+          />
+        )}
+        {typeIcons[file.type]}
       </CardContent>
       <CardFooter>
-        <Button>Download</Button>
+        <Button
+          onClick={() => {
+            // open a new tab to the file
+            window.open(file.url, "_blank");
+          }}
+        >
+          Download
+        </Button>
       </CardFooter>
     </Card>
   );
