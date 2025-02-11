@@ -16,6 +16,7 @@ async function hasAccessToOrg(ctx, tokenIdentifier, orgId) {
   return user.orgIds.includes(orgId) || user.tokenIdentifier.includes(orgId);
 }
 
+// 1. create file 
 export const createFile = mutation({
   args: {
     name: v.string(),
@@ -44,6 +45,7 @@ export const createFile = mutation({
   },
 });
 
+// 2. read files 
 export const getFiles = query({
   args: {
     orgId: v.string(),
@@ -69,3 +71,31 @@ export const getFiles = query({
       .collect();
   },
 });
+
+// 3. delete file
+export const deleteFile = mutation({
+  args: {
+    fileId: v.id("files"),
+  },
+  async handler(ctx, args) {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new ConvexError("删除文件前，必须登录");
+    }
+
+    const file = await ctx.db.get(args.fileId)
+    if(!file){
+      throw new ConvexError("Convex中没有该文件的记录");
+    }
+
+    const hasAccess = await hasAccessToOrg(
+      ctx,
+      identity.tokenIdentifier,
+      file.orgId
+    );
+    if (!hasAccess) {
+      throw new ConvexError("没有删除该文件的权限");
+    }
+    await ctx.db.delete(args.fileId)
+  }
+})
