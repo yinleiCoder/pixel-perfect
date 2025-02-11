@@ -14,7 +14,10 @@ export const generateUploadUrl = mutation(async (ctx) => {
 
 async function hasAccessToOrg(ctx, tokenIdentifier, orgId) {
   const user = await getUser(ctx, tokenIdentifier);
-  return user.orgIds.includes(orgId) || user.tokenIdentifier.includes(orgId);
+  return (
+    user.orgIds.some((org) => org.orgId === orgId) ||
+    user.tokenIdentifier.includes(orgId)
+  );
 }
 
 // 1. create file
@@ -131,6 +134,13 @@ export const deleteFile = mutation({
     if (!hasAccess) {
       throw new ConvexError("没有删除该文件的权限");
     }
+
+    const isAdmin =
+      user.orgIds.find((org) => org.orgId === file.orgId)?.role === "admin";
+    if (!isAdmin) {
+      throw new ConvexError("只有该组织的管理员才有权删除文件");
+    }
+
     await ctx.db.delete(args.fileId);
   },
 });

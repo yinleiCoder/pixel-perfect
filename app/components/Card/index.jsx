@@ -9,9 +9,9 @@ import {
   Image as LucideImage,
   Package,
   Star,
-  StarHalf,
   TrashIcon,
 } from "lucide-react";
+import { Protect } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -94,17 +94,19 @@ function CardActionsDropdown({ file, isFavorited }) {
             className="flex items-center gap-1 cursor-pointer"
             onClick={() => toggleFavorite({ fileId: file._id })}
           >
-            {isFavorited ? <Star fill="yellow"/> : <Star />}
-            <span>{isFavorited?"已收藏":"收藏"}</span>
+            {isFavorited ? <Star fill="yellow" /> : <Star />}
+            <span>{isFavorited ? "已收藏" : "收藏"}</span>
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className="flex items-center gap-1 text-red-500 cursor-pointer"
-            onClick={() => setIsConfirmOpen(true)}
-          >
-            <TrashIcon />
-            <span>删除</span>
-          </DropdownMenuItem>
+          <Protect role="org:admin" fallback={<></>}>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="flex items-center gap-1 text-red-500 cursor-pointer"
+              onClick={() => setIsConfirmOpen(true)}
+            >
+              <TrashIcon />
+              <span>删除</span>
+            </DropdownMenuItem>
+          </Protect>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
