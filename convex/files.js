@@ -41,12 +41,13 @@ export const createFile = mutation({
     if (!hasAccess) {
       throw new ConvexError("您没有被该组织授权");
     }
-
+    const user = await getUser(ctx, identity.tokenIdentifier);
     await ctx.db.insert("files", {
       name: args.name,
       type: args.type,
       orgId: args.orgId,
       fileId: args.fileId,
+      userId: user._id,
     });
   },
 });
@@ -57,6 +58,7 @@ export const getFiles = query({
     orgId: v.string(),
     query: v.optional(v.string()),
     favorites: v.optional(v.boolean()),
+    type: v.optional(fileTypes),
   },
   async handler(ctx, args) {
     const identity = await ctx.auth.getUserIdentity();
@@ -96,6 +98,9 @@ export const getFiles = query({
           if (args.query) {
             return file.name.toLowerCase().includes(args.query.toLowerCase());
           }
+          if (args.type) {
+            return file.type === args.type;
+          }
           if (args.favorites && favorites) {
             return favorites.some((favorite) => favorite.fileId === file._id);
           }
@@ -114,6 +119,7 @@ export const getFiles = query({
 export const deleteFile = mutation({
   args: {
     fileId: v.id("files"),
+    storageId: v.id("_storage"),
   },
   async handler(ctx, args) {
     const identity = await ctx.auth.getUserIdentity();
@@ -134,14 +140,16 @@ export const deleteFile = mutation({
     if (!hasAccess) {
       throw new ConvexError("没有删除该文件的权限");
     }
-
-    const isAdmin =
+    const user = await getUser(ctx, identity.tokenIdentifier);
+    const canDelete =
+      file.userId === user._id ||
       user.orgIds.find((org) => org.orgId === file.orgId)?.role === "admin";
-    if (!isAdmin) {
-      throw new ConvexError("只有该组织的管理员才有权删除文件");
+    if (!canDelete) {
+      throw new ConvexError("只有该组织的管理员或文件的所有者才有权删除文件");
     }
 
     await ctx.db.delete(args.fileId);
+    await ctx.storage.delete(args.storageId);
   },
 });
 

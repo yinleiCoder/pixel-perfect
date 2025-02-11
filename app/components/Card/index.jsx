@@ -3,16 +3,14 @@
 import {
   AudioLines,
   Clapperboard,
-  EllipsisVertical,
   File,
   FileText,
   Image as LucideImage,
   Package,
-  Star,
-  TrashIcon,
 } from "lucide-react";
-import { Protect } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
+import dayjs from "dayjs";
+import Image from "next/image";
+import { api } from "@/convex/_generated/api";
 import {
   Card,
   CardContent,
@@ -20,100 +18,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { useState } from "react";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { useToast } from "@/hooks/use-toast";
-import Image from "next/image";
-
-function CardActionsDropdown({ file, isFavorited }) {
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  const { toast } = useToast();
-  const deleteFile = useMutation(api.files.deleteFile);
-  const toggleFavorite = useMutation(api.files.toggleFavorite);
-  return (
-    <>
-      <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
-        {/* <AlertDialogTrigger>Open</AlertDialogTrigger> */}
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>确定删除?</AlertDialogTitle>
-            <AlertDialogDescription>
-              删除
-              <span className="px-1 py-1 text-red-500 font-bold">
-                {file.name}
-              </span>
-              <span className="px-2 py-1 bg-gray-100 rounded mr-1">
-                {file._id}
-              </span>
-              文件后不可恢复！
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>取消</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={async () => {
-                await deleteFile({
-                  fileId: file._id,
-                });
-                toast({
-                  title: `${file.name} 已删除`,
-                  description: "文件已从Convex中永久删除",
-                });
-              }}
-            >
-              删除
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <EllipsisVertical />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem
-            className="flex items-center gap-1 cursor-pointer"
-            onClick={() => toggleFavorite({ fileId: file._id })}
-          >
-            {isFavorited ? <Star fill="yellow" /> : <Star />}
-            <span>{isFavorited ? "已收藏" : "收藏"}</span>
-          </DropdownMenuItem>
-          <Protect role="org:admin" fallback={<></>}>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="flex items-center gap-1 text-red-500 cursor-pointer"
-              onClick={() => setIsConfirmOpen(true)}
-            >
-              <TrashIcon />
-              <span>删除</span>
-            </DropdownMenuItem>
-          </Protect>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
-  );
-}
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FileActionsDropdown } from "../FileAction";
+import { useQuery } from "convex/react";
 
 function FileCard({ file, favorites }) {
+  const userProfile = useQuery(api.users.getUserProfile, {
+    userId: file.userId,
+  });
   const typeIcons = {
     image: <LucideImage />,
     audio: <AudioLines />,
@@ -122,20 +34,21 @@ function FileCard({ file, favorites }) {
     zip: <Package />,
     other: <File />,
   };
-
   const isFavorited = favorites?.some(
     (favorite) => favorite.fileId === file._id
   );
+  const date = dayjs(file._creationTime)
+  const formattedDate = date.format("YYYY年MM月DD日 HH:mm:ss")
 
   return (
     <Card>
-      <CardHeader className="relative">
-        <CardTitle className="flex items-center gap-1">
+      <CardHeader className="relative p-4">
+        <CardTitle className="flex items-center text-base font-normal gap-1">
           {typeIcons[file.type]}
           {file.name}
         </CardTitle>
         <div className="absolute top-2 right-2">
-          <CardActionsDropdown isFavorited={isFavorited} file={file} />
+          <FileActionsDropdown isFavorited={isFavorited} file={file} />
         </div>
       </CardHeader>
       <CardContent className="relative aspect-video flex justify-center items-center">
@@ -149,15 +62,15 @@ function FileCard({ file, favorites }) {
         )}
         {typeIcons[file.type]}
       </CardContent>
-      <CardFooter>
-        <Button
-          onClick={() => {
-            // open a new tab to the file
-            window.open(file.url, "_blank");
-          }}
-        >
-          Download
-        </Button>
+      <CardFooter className="flex justify-between items-center p-4 text-sm text-gray-500">
+        <div className="flex items-center gap-1">
+          <Avatar className="w-6 h-6">
+            <AvatarImage src={userProfile?.image} />
+            <AvatarFallback>{userProfile?.name.charAt(0)}</AvatarFallback>
+          </Avatar>
+          <span>{userProfile?.name}</span>
+        </div>
+        <span className="text-xs">{formattedDate}</span>
       </CardFooter>
     </Card>
   );

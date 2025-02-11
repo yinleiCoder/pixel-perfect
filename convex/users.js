@@ -1,5 +1,5 @@
 import { ConvexError, v } from "convex/values";
-import { internalMutation } from "./_generated/server";
+import { internalMutation, query } from "./_generated/server";
 import { roleTypes } from "./schema";
 
 export async function getUser(ctx, tokenIdentifier) {
@@ -19,11 +19,31 @@ export async function getUser(ctx, tokenIdentifier) {
 export const createUser = internalMutation({
   args: {
     tokenIdentifier: v.string(),
+    name: v.string(),
+    image: v.string(),
   },
   async handler(ctx, args) {
     await ctx.db.insert("users", {
       tokenIdentifier: args.tokenIdentifier,
+      name: args.name,
+      image: args.image,
       orgIds: [],
+    });
+  },
+});
+
+// update user
+export const updateUser = internalMutation({
+  args: {
+    tokenIdentifier: v.string(),
+    name: v.string(),
+    image: v.string(),
+  },
+  async handler(ctx, args) {
+    const user = await getUser(ctx, tokenIdentifier);
+    await ctx.db.patch(user._id, {
+      name: args.name,
+      image: args.image,
     });
   },
 });
@@ -58,5 +78,36 @@ export const updateRoleInOrgForUser = internalMutation({
     await ctx.db.patch(user._id, {
       orgIds: user.orgIds,
     });
+  },
+});
+
+// get user profile
+export const getUserProfile = query({
+  args: {
+    userId: v.id("users"),
+  },
+  async handler(ctx, args) {
+    const user = await ctx.db.get(args.userId);
+    return {
+      name: user?.name,
+      image: user?.image,
+    };
+  },
+});
+
+// get myself information
+export const getMe = query({
+  args: {},
+  async handler(ctx, args) {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return null;
+    }
+
+    const user = await getUser(ctx, identity.tokenIdentifier);
+    if (!user) {
+      return null;
+    }
+    return user;
   },
 });
