@@ -1,9 +1,10 @@
 # Pixel Perfect - Nextjs
 
-
+在这里，你可以获取作者开发的所有实用的软件，包括游戏外挂程序，是的，免费！
 
 ## Features
 
+- 组织空间下的文件共享
 
 ## Dependencies
 

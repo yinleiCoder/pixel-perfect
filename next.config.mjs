@@ -6,6 +6,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "amicable-chameleon-487.convex.cloud",
       },
+      {
+        protocol: "https",
+        hostname: "dutiful-rook-363.convex.cloud",
+      },
     ],
   },
 };
