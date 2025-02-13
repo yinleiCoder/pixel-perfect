@@ -1,7 +1,8 @@
 export default {
   providers: [
     {
-      domain: "https://hip-feline-1.clerk.accounts.dev",
+      // 该环境变量在convex控制台查看
+      domain: process.env.CLERK_JWT_ISSUER_DOMAIN,
       applicationID: "convex",
     },
   ],

@@ -24,28 +24,28 @@ http.route({
       switch (result.type) {
         case "user.created":
           await ctx.runMutation(internal.users.createUser, {
-            tokenIdentifier: `https://hip-feline-1.clerk.accounts.dev|${result.data.id}`,
-            name: `${result.data.first_name} ${result.data.last_name ?? ''}`,
+            tokenIdentifier: `${process.env.CLERK_JWT_ISSUER_DOMAIN}|${result.data.id}`,
+            name: `${result.data.first_name} ${result.data.last_name ?? ""}`,
             image: result.data.image_url,
           });
           break;
         case "user.updated":
           await ctx.runMutation(internal.users.updateUser, {
-            tokenIdentifier: `https://hip-feline-1.clerk.accounts.dev|${result.data.id}`,
-            name: `${result.data.first_name} ${result.data.last_name ?? ''}`,
+            tokenIdentifier: `${process.env.CLERK_JWT_ISSUER_DOMAIN}|${result.data.id}`,
+            name: `${result.data.first_name} ${result.data.last_name ?? ""}`,
             image: result.data.image_url,
           });
           break;
         case "organizationMembership.created":
           await ctx.runMutation(internal.users.addOrgIdToUser, {
-            tokenIdentifier: `https://hip-feline-1.clerk.accounts.dev|${result.data.public_user_data.user_id}`,
+            tokenIdentifier: `${process.env.CLERK_JWT_ISSUER_DOMAIN}|${result.data.public_user_data.user_id}`,
             orgId: result.data.organization.id,
             role: result.data.role === "org:admin" ? "admin" : "member",
           });
           break;
         case "organizationMembership.updated":
           await ctx.runMutation(internal.users.updateRoleInOrgForUser, {
-            tokenIdentifier: `https://hip-feline-1.clerk.accounts.dev|${result.data.public_user_data.user_id}`,
+            tokenIdentifier: `${process.env.CLERK_JWT_ISSUER_DOMAIN}|${result.data.public_user_data.user_id}`,
             orgId: result.data.organization.id,
             role: result.data.role === "org:admin" ? "admin" : "member",
           });

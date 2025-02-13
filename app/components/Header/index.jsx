@@ -1,12 +1,6 @@
-import {
-  UserButton,
-  OrganizationSwitcher,
-  SignedOut,
-  SignInButton,
-  ClerkLoaded,
-} from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Auth from "../Auth";
 
 function Header() {
   return (
@@ -22,15 +16,7 @@ function Header() {
           <Link href={"/"}>关于我</Link>
         </Button>
         <div className="flex items-center gap-4">
-          <ClerkLoaded>
-            <OrganizationSwitcher />
-            <UserButton />
-            <SignedOut>
-              <SignInButton>
-                <Button>登录</Button>
-              </SignInButton>
-            </SignedOut>
-          </ClerkLoaded>
+          <Auth />
         </div>
       </div>
     </div>
