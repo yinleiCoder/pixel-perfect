@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "Pixel Perfect",
-  description: "Yinlei's website!",
+  description: "在这里，你可以获取作者开发的所有实用的软件，包括游戏外挂程序，是的，免费！",
 };
 
 export default function RootLayout({ children }) {
