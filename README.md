@@ -1,6 +1,6 @@
 # Pixel Perfect - Nextjs
 
-在这里，你可以获取作者开发的所有实用的软件，包括游戏外挂程序，是的，免费！
+The best way to learn is by experimenting.
 
 ## Features
 
@@ -12,7 +12,9 @@
 - [Convex](https://docs.convex.dev/quickstart/nextjs)
 - [Clerk](https://dashboard.clerk.com/sign-up)
 - [Shadcn](https://ui.shadcn.com/docs)
-- [Lucide](https://lucide.dev/)
+- [Orate](https://www.orate.dev/)
+- [Gsap](https://gsap.com/resources/get-started/#creating-an-animation)
+- [Heroicons](https://heroicons.com/outline)
 - [Undraw](https://undraw.co/)
 - [Vercel](https://vercel.com/)
 - [NameCheap](https://www.namecheap.com/)

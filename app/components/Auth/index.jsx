@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { OrganizationSwitcher, SignInButton, UserButton } from "@clerk/nextjs";
 import { Authenticated, Unauthenticated } from "convex/react";
+import { Button } from "@/components/ui/button";
 
-// Clerk Auth
+// Clerk Auth Component
 function Auth() {
   return (
     <>
