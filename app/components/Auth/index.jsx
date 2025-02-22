@@ -7,17 +7,17 @@ import { Button } from "@/components/ui/button";
 // Clerk Auth Component
 function Auth() {
   return (
-    <>
+    <div className="flex gap-1 items-center">
       <Unauthenticated>
         <SignInButton>
-          <Button>登录</Button>
+          <Button size="sm">登录</Button>
         </SignInButton>
       </Unauthenticated>
       <Authenticated>
         <OrganizationSwitcher />
         <UserButton />
       </Authenticated>
-    </>
+    </div>
   );
 }
 

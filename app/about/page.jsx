@@ -1,12 +1,19 @@
+import AudioPlayer from "../components/AudioPlayer";
+import CDcover from "@/public/cover.jpg";
 
 function AboutPage() {
-    return (
-      <div>
-          <h1 className="">
-              About<sup>(02)</sup>
-          </h1>
-      </div>
-    )
-  }
-  
-  export default AboutPage
+  return (
+    <main className="w-full bg-black">
+      <AudioPlayer
+        textsPrimary={[
+          "For the love of good old days",
+          "We'll take you on a journey to the past",
+        ]}
+        textSecondary="Put your headphones on"
+        coverImage={CDcover}
+      />
+    </main>
+  );
+}
+
+export default AboutPage;

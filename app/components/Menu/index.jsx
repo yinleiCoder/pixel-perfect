@@ -5,8 +5,9 @@ import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { Button } from "@/components/ui/button";
 import Auth from "../Auth";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 gsap.registerPlugin(useGSAP);
 
@@ -18,6 +19,7 @@ const menus = [
 
 // Menu with Gsap animation
 function Menu() {
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const container = useRef();
   const tl = useRef();
@@ -56,16 +58,21 @@ function Menu() {
   };
 
   return (
-    <div ref={container} className="menu-container w-full h-[60px]">
+    <div ref={container} className={clsx("menu-container w-full h-[60px]", {
+      "bg-black text-white": pathname.includes("about"),
+    })}>
       <div className="menu-bar fixed top-0 left-0 w-screen p-4 flex justify-between items-center z-40">
         <div className="menu-logo font-medium">
           <Link href="/">Pixel Perfect</Link>
         </div>
-        <div className="menu-open cursor-pointer" onClick={toggleMenu}>
-          <p>Menu</p>
+        <div className="flex space-x-4 items-center">
+          <Auth />
+          <div className="menu-open cursor-pointer" onClick={toggleMenu}>
+            <p>Menu</p>
+          </div>
         </div>
       </div>
-      <div className="menu-overlay fixed top-0 left-0 w-screen h-screen p-4 flex bg-red-500 z-40 [clip-path:polygon(0_0,100%_0,100%_0%,0%_0%)]">
+      <div className="menu-overlay fixed top-0 left-0 w-screen h-screen p-4 flex bg-red-500 text-black z-40 [clip-path:polygon(0_0,100%_0,100%_0%,0%_0%)]">
         <div className="menu-overlay-bar hidden md:block">
           <div className="menu-logo">
             <Link href="/">Pixel Perfect</Link>
@@ -97,10 +104,12 @@ function Menu() {
           </div>
           <div className="menu-info flex">
             <div className="menu-info-col flex-1 flex flex-col justify-end">
-              <a href="#">X &#8599;</a>
-              <a href="#">Youtube &#8599;</a>
-              <a href="#">Bilibili &#8599;</a>
-              <a href="#">Github &#8599;</a>
+              <a href="https://x.com/leiyin06388456">X &#8599;</a>
+              <a href="https://www.youtube.com/@leiyin1998">Youtube &#8599;</a>
+              <a href="https://space.bilibili.com/355529756?spm_id_from=333.788.0.0">
+                Bilibili &#8599;
+              </a>
+              <a href="https://github.com/yinleiCoder">Github &#8599;</a>
             </div>
             <div className="menu-info-col flex-1 flex flex-col justify-end">
               <p>yl1099129793@gmail.com</p>
@@ -112,22 +121,6 @@ function Menu() {
         </div>
       </div>
     </div>
-    // <div className="border-b py-2">
-    //   <div className="container mx-auto flex justify-between items-center">
-    //     <Link href="/">
-    //       <span className="font-bold">Pixel Perfect</span>
-    //     </Link>
-    //     <Button variant={"ghost"}>
-    //       <Link href="/files">软件托管</Link>
-    //     </Button>
-    //     <Button variant={"ghost"}>
-    //       <Link href="/">关于我</Link>
-    //     </Button>
-    //     <div className="flex items-center gap-4">
-    //       <Auth />
-    //     </div>
-    //   </div>
-    // </div>
   );
 }
 
