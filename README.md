@@ -14,6 +14,7 @@ The best way to learn is by experimenting.
 - [Shadcn](https://ui.shadcn.com/docs)
 - [Orate](https://www.orate.dev/)
 - [Gsap](https://gsap.com/resources/get-started/#creating-an-animation)
+- [React Player](https://github.com/cookpete/react-player)
 - [Heroicons](https://heroicons.com/outline)
 - [Undraw](https://undraw.co/)
 - [Vercel](https://vercel.com/)

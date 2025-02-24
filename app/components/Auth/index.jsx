@@ -10,7 +10,7 @@ function Auth() {
     <div className="flex gap-1 items-center">
       <Unauthenticated>
         <SignInButton>
-          <Button size="sm">登录</Button>
+          <Button size="sm">LOGIN</Button>
         </SignInButton>
       </Unauthenticated>
       <Authenticated>

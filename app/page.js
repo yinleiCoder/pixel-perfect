@@ -1,12 +1,11 @@
+import Slider from "./components/Slider";
 
 function HomePage() {
   return (
-    <div>
-        <h1>
-            Index<sup>(01)</sup>
-        </h1>
-    </div>
-  )
+    <main className="w-full h-full font-sans bg-black">
+      <Slider />
+    </main>
+  );
 }
 
-export default HomePage
+export default HomePage;

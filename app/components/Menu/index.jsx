@@ -58,17 +58,20 @@ function Menu() {
   };
 
   return (
-    <div ref={container} className={clsx("menu-container w-full h-[60px]", {
-      "bg-black text-white": pathname.includes("about"),
-    })}>
-      <div className="menu-bar fixed top-0 left-0 w-screen p-4 flex justify-between items-center z-40">
+    <div
+      ref={container}
+      className={clsx("menu-container w-full h-[60px]", {
+        "bg-black text-white": pathname.includes("about") || pathname === "/",
+      })}
+    >
+      <div className="menu-bar fixed top-0 left-0 w-screen p-4 flex justify-between items-start z-40">
         <div className="menu-logo font-medium">
           <Link href="/">Pixel Perfect</Link>
         </div>
         <div className="flex space-x-4 items-center">
           <Auth />
           <div className="menu-open cursor-pointer" onClick={toggleMenu}>
-            <p>Menu</p>
+            <p className="uppercase">Menu</p>
           </div>
         </div>
       </div>
