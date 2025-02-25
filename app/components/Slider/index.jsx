@@ -33,7 +33,6 @@ function Slider() {
     gsap.to(".slider-card", {
       y: (i) => 0 + 20 * i + "%",
       z: (i) => 15 * i,
-      width: (i) => 65 + i + "%",
       duration: 1,
       ease: "power3.out",
       stagger: -0.1,
