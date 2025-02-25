@@ -47,7 +47,7 @@ export default function FilesPage() {
   );
   return (
     <>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-2 md:mb-6">
         <SearchBar query={query} setQuery={setQuery} />
         <UploadButton />
       </div>
@@ -83,7 +83,7 @@ export default function FilesPage() {
           </div>
         )}
         <TabsContent value="grid">
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {files?.map((file) => {
               return (
                 <FileCard

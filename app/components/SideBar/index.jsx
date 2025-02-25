@@ -2,27 +2,33 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Package, Star } from "lucide-react";
 import clsx from "clsx";
 import { Button } from "@/components/ui/button";
+import { ArchiveBoxIcon, StarIcon } from "@heroicons/react/24/solid";
 
 function SideBar() {
   const pathname = usePathname();
   return (
-    <div className="w-40 flex flex-col items-start gap-2">
+    <div className="w-full md:w-40 flex flex-row md:flex-col items-start gap-2">
       <Link href="/files">
-        <Button variant="link" className={clsx("flex gap-1 items-center", {
-            "text-blue-500": pathname.includes("files")
-        })}>
-          <Package />
+        <Button
+          variant="link"
+          className={clsx("flex gap-1 items-center", {
+            "text-red-500": pathname.includes("files"),
+          })}
+        >
+          <ArchiveBoxIcon />
           存储
         </Button>
       </Link>
       <Link href="/favorites">
-        <Button variant="link" className={clsx("flex gap-1 items-center", {
-            "text-blue-500": pathname.includes("favorites")
-        })}>
-          <Star />
+        <Button
+          variant="link"
+          className={clsx("flex gap-1 items-center", {
+            "text-red-500": pathname.includes("favorites"),
+          })}
+        >
+          <StarIcon />
           收藏
         </Button>
       </Link>

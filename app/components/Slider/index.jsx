@@ -21,7 +21,7 @@ function Slider() {
   }, []);
 
   const { contextSafe } = useGSAP(
-    (context, contextSafe) => {
+    () => {
       if (isClient && sliderRef.current) {
         initializeCards();
       }
@@ -33,6 +33,7 @@ function Slider() {
     gsap.to(".slider-card", {
       y: (i) => 0 + 20 * i + "%",
       z: (i) => 15 * i,
+      width: (i) => 65 + i + "%",
       duration: 1,
       ease: "power3.out",
       stagger: -0.1,
@@ -70,12 +71,12 @@ function Slider() {
         className="slider-container w-full h-screen overflow-hidden relative"
       >
         <div
-          className="slider w-full h-screen absolute top-[5vh] perspective-[175px] perspective-origin-[50%_100%] overflow-hidden transform-3d"
+          className="slider w-full h-screen absolute top-0 perspective-[175px] perspective-origin-[50%_100%] overflow-hidden transform-3d"
           ref={sliderRef}
         >
           {videos.map((video) => (
             <div
-              className="slider-card absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] translate-z-0 w-[65%] h-[500px] bg-black border-r border-solid border-[#303030] rounded-[7px] overflow-hidden flex flex-col after:absolute after:top-0 after:left-0 after:w-full after:h-full after:border after:border-solid after:border-[#303030] after:rounded-[8px] after:z-10"
+              className="slider-card absolute top-[40%] left-[50%] -translate-x-[50%] -translate-y-[50%] translate-z-0 w-[90%] md:w-[65%] md:h-[500px] bg-black border-r border-solid border-[#303030] rounded-[7px] overflow-hidden flex flex-col after:absolute after:top-0 after:left-0 after:w-full after:h-full after:border after:border-solid after:border-[#303030] after:rounded-[8px] after:z-10"
               key={video.title}
             >
               <div className="card-info w-full px-2 py-1 flex items-center bg-black z-10">

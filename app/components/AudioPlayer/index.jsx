@@ -7,8 +7,7 @@ import { useGSAP } from "@gsap/react";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import CD from "@/public/cd.png";
 
-gsap.registerPlugin(MotionPathPlugin);
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(MotionPathPlugin, useGSAP);
 
 // Audio Player with Gsap animation
 function AudioPlayer({ textsPrimary, textSecondary, coverImage }) {
@@ -24,8 +23,8 @@ function AudioPlayer({ textsPrimary, textSecondary, coverImage }) {
   }, []);
 
   useGSAP(
-    () => {
-      const animationText = (selector, delay) => {
+    (context, contextSafe) => {
+      const animationText = contextSafe((selector, delay) => {
         gsap.to(selector, {
           attr: { startOffset: "100%" },
           ease: "linear",
@@ -33,7 +32,7 @@ function AudioPlayer({ textsPrimary, textSecondary, coverImage }) {
           repeat: -1,
           delay: delay,
         });
-      };
+      });
       animationText("#Text1", 0);
       animationText("#Text2", 4);
       gsap.to(".cd-cover", {

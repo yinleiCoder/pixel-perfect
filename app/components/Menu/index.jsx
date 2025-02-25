@@ -65,13 +65,15 @@ function Menu() {
       })}
     >
       <div className="menu-bar fixed top-0 left-0 w-screen p-4 flex justify-between items-start z-40">
-        <div className="menu-logo font-medium">
+        <div className="menu-logo font-medium hidden md:block">
           <Link href="/">Pixel Perfect</Link>
         </div>
-        <div className="flex space-x-4 items-center">
+        <div className="flex-1 md:flex-none flex justify-between md:justify-normal md:space-x-4 items-center">
           <Auth />
           <div className="menu-open cursor-pointer" onClick={toggleMenu}>
-            <p className="uppercase">Menu</p>
+            <p className="uppercase hover:scale-110 hover:font-medium transition">
+              Menu
+            </p>
           </div>
         </div>
       </div>
@@ -81,8 +83,11 @@ function Menu() {
             <Link href="/">Pixel Perfect</Link>
           </div>
         </div>
-        <div className="menu-close-icon flex-[2] hidden md:flex items-end cursor-pointer">
-          <XMarkIcon className="size-10" onClick={toggleMenu} />
+        <div className="menu-close-icon flex-[2] hidden md:flex items-end">
+          <XMarkIcon
+            className="size-10 hover:scale-110 hover:font-medium transition cursor-pointer"
+            onClick={toggleMenu}
+          />
         </div>
         <div className="menu-copy flex-[4] flex flex-col justify-between pt-8 md:pt-4">
           <div className="menu-links">

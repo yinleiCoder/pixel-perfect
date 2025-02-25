@@ -1,6 +1,11 @@
 "use client";
 
-import { CloudDownload, EllipsisVertical, Star, TrashIcon } from "lucide-react";
+import {
+  ArrowDownOnSquareIcon,
+  EllipsisVerticalIcon,
+  StarIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 import { Protect } from "@clerk/nextjs";
 import { useState } from "react";
 import { useMutation, useQuery } from "convex/react";
@@ -71,7 +76,7 @@ export function FileActionsDropdown({ file, isFavorited }) {
 
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <EllipsisVertical />
+          <EllipsisVerticalIcon className="size-5" />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem
@@ -80,14 +85,14 @@ export function FileActionsDropdown({ file, isFavorited }) {
               window.open(file.url, "_blank");
             }}
           >
-            <CloudDownload />
+            <ArrowDownOnSquareIcon />
             <span>下载</span>
           </DropdownMenuItem>
           <DropdownMenuItem
             className="flex items-center gap-1 cursor-pointer"
             onClick={() => toggleFavorite({ fileId: file._id })}
           >
-            {isFavorited ? <Star fill="yellow" /> : <Star />}
+            <StarIcon fill={isFavorited ? "orange" : ""} />
             <span>{isFavorited ? "已收藏" : "收藏"}</span>
           </DropdownMenuItem>
           <Protect

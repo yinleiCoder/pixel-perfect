@@ -2,10 +2,10 @@ import SideBar from "../components/SideBar";
 
 export default function DashboardLayout({ children }) {
   return (
-    <main className="container mx-auto pt-6">
-      <div className="flex gap-8">
+    <main className="container mx-auto p-2 md:pt-2">
+      <div className="flex flex-col md:flex-row md:gap-8">
         <SideBar />
-        <div className="flex-1">{children}</div>
+        <section className="flex-1">{children}</section>
       </div>
     </main>
   );
